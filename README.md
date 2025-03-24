@@ -1,6 +1,6 @@
 # <a href="https://www.linkedin.com/in/Kevin-M1/">Kevin M</a>'s IT and Cybersecurity Project Portfolio 🔐
 
-'Im deeply passionate about cybersecurity and thrive on solving complex challenges through practical, hands-on projects. From vulnerability management to threat detection, these experiences have allowed me to explore the dynamic nature of the cybersecurity landscape. I invite you to take a look at my work and see how I've contributed to strengthening security operations and processes
+I'm deeply passionate about cybersecurity and thrive on solving complex challenges through practical, hands-on projects. From vulnerability management to threat detection, these experiences have allowed me to explore the dynamic nature of the cybersecurity landscape. I invite you to take a look at my work and see how I've contributed to strengthening security operations and processes
 
 
 ## ⚠️ Vulnerability Management Projects
