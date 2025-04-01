@@ -26,7 +26,7 @@
     PS C:\> .\WN10-CC-000305.ps1 
 #>
 
-PS C:\Users\Kevin0715> C:\Users\Kevin0715> # Define the registry path and value
+PS C:\Users\Kevin0715> # Define the registry path and value
 $regPath = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search"
 $name = "AllowIndexingEncryptedStoresOrItems"
 $value = 0
