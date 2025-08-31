@@ -25,22 +25,25 @@
     Example syntax:
     PS C:\> .WN10-AC-000005.ps1 
 #>
-
-# Define the security template content
-$template = @"
+# Create full STIG-compliant account lockout policy
+$infContent = @"
 [System Access]
 LockoutBadCount = 5
 ResetLockoutCount = 15
 LockoutDuration = 15
 "@
 
-# Save the template to a temporary file
-$tempFile = "$env:TEMP\STIG_Lockout.inf"
-$template | Out-File -Encoding ASCII -FilePath $tempFile
+# Save to temp file
+$tempInf = "$env:TEMP\STIG_Lockout.inf"
+$infContent | Out-File -Encoding ASCII -FilePath $tempInf
 
-# Apply the security settings
-secedit /configure /db secedit.sdb /cfg $tempFile /quiet
+# Apply the policy
+secedit /configure /db C:\Windows\Security\Database\STIG_Lockout.sdb /cfg $tempInf /quiet
+
+# Refresh policy engine
+gpupdate /force
 
 # Clean up
-Remove-Item $tempFile
-Write-Host "STIG-compliant account lockout policy applied."
+Remove-Item $tempInf
+Write-Host "STIG-compliant account lockout policy applied successfully."
+
