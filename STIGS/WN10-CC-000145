@@ -39,4 +39,4 @@ PS C:\Users\Kevin0715> # WN10-CC-000145 - Require password on wakeup (on battery
 >> }
 >> New-ItemProperty -Path $regPath -Name "DCSettingIndex" -PropertyType DWord -Value 1 -Force | Out-Null
 >>
-PS C:\Users\Kevin0715>
+PS C:\Users\Kevin0715>.
