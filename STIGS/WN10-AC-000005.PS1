@@ -12,7 +12,7 @@
     Version         : 1.0
     CVEs            : N/A
     Plugin IDs      : N/A
-    STIG-ID         : WN10-CC-000005
+    STIG-ID         : WN10-AC-000005
 
 .TESTED ON
     Date(s) Tested  : 
@@ -23,7 +23,7 @@
 .USAGE
    
     Example syntax:
-    PS C:\> .WN10-CC-000005.ps1 
+    PS C:\> .WN10-AC-000005.ps1 
 #>
 
 # Define the security template content
