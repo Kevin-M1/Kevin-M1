@@ -1,0 +1,33 @@
+<#
+ .SYNOPSIS  
+    Fixes WN10-CC-000145 - Require password on wakeup (on battery).
+.DESCRIPTION
+    Configures Windows 10 so that users must enter a password
+    when the system resumes from sleep while on battery.
+
+.NOTES
+    Author          : Kevin Mejia
+    LinkedIn        :https://www.linkedin.com/in/kevin-mejia-901039270/
+    GitHub          : https://github.com/Kevin-M1
+    Date Created    : 2025-08-31
+    Last Modified   : 2025-08-31
+    Version         : 1.0
+    CVEs            : N/A
+    Plugin IDs      : N/A
+    STIG-ID         : WN10-AC-000145
+
+.TESTED ON
+    Date(s) Tested  : 
+    Tested By       : 
+    Systems Tested  : 
+    PowerShell Ver. : 
+
+.USAGE
+   
+    Example syntax:
+    PS C:\> .WN10-AC-000451.ps1 
+PS C:\Users\Kevin0715> # WN10-CC-000145 - Require password on wakeup (on battery)
+
+# Apply setting to current power scheme (DC = on battery)
+powercfg /SETDCVALUEINDEX SCHEME_CURRENT SUB_NONE CONSOLELOCK 1
+powercfg /SETACTIVE SCHEME_CURRENT
