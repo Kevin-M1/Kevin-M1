@@ -24,7 +24,7 @@
 
 .USAGE
    
-    Example syntax:
+   Example syntax:
     PS C:\> .WN10-AC-000451.ps1 
 PS C:\Users\Kevin0715> # WN10-CC-000145 - Require password on wakeup (on battery)
 >>
