@@ -1,0 +1,53 @@
+<#
+.SYNOPSIS
+    Remediates WN10-CC-000391 DISA STIG for Windows 10.
+
+.DESCRIPTION
+    Disables Internet Explorer functionality on Windows 10 systems
+    by configuring registry settings that prevent 
+    users from launching or using Internet Explorer.
+
+    This strengthens system security by reducing exposure to legacy 
+    web technologies, mitigating known vulnerabilities in Internet Explorer,
+    and encouraging use of modern, supported browsers.
+#>
+.NOTES
+    Author          : Kevin Mejia
+    LinkedIn        :https://www.linkedin.com/in/kevin-mejia-901039270/
+    GitHub          : https://github.com/Kevin-M1
+    Date Created    : 2025-08-31
+    Last Modified   : 2025-08-31
+    Version         : 1.0
+    CVEs            : N/A
+    Plugin IDs      : N/A
+    STIG-ID         : WN10-CC-000391
+
+.TESTED ON
+    Date(s) Tested  : 
+    Tested By       : 
+    Systems Tested  : 
+    PowerShell Ver. : 
+
+.USAGE
+    
+    Example syntax:
+    PS C:\> .\__(WN10-CC-000391).ps1 
+
+PS C:\Users\Kevin0715> # Define registry path and key
+>> $regPath = "HKLM:\SOFTWARE\Policies\Microsoft\Internet Explorer\Main"
+>>
+>> # Create the registry path if it doesn't exist
+>> if (-not (Test-Path $regPath)) {
+>>     New-Item -Path $regPath -Force | Out-Null
+>> }
+>>
+>> # Set the policy value: 1 = Disable Internet Explorer 11 as a standalone browser
+>> Set-ItemProperty -Path $regPath -Name "DisableIE" -Type DWord -Value 1
+>>
+>> # Optional: Force group policy to refresh
+>> gpupdate /force
+>>
+>> Write-Output "`n? Internet Explorer 11 has been disabled as a standalone browser."
+Updating policy...
+
+Computer Policy update has completed successfully.
