@@ -24,24 +24,18 @@
    
     Example syntax:
     PS C:\> .WN10-AC-000005.ps1 
-#>
-# Create full STIG-compliant account lockout policy
-$infContent = @"
-[System Access]
-LockoutBadCount = 5
-ResetLockoutCount = 15
-LockoutDuration = 15
-"@
+# Set Account Lockout Threshold (e.g., 5 failed logon attempts)
+net accounts /lockoutthreshold:5
 
-# Save to temp file
-$tempInf = "$env:TEMP\STIG_Lockout.inf"
-$infContent | Out-File -Encoding ASCII -FilePath $tempInf
+# Set Account Lockout Duration to 15 minutes
+net accounts /lockoutduration:15
 
-# Apply the policy
-secedit /configure /db C:\Windows\Security\Database\STIG_Lockout.sdb /cfg $tempInf /quiet
+# Set Reset Account Lockout Counter After 15 minutes
+net accounts /lockoutwindow:15
 
-# Refresh policy engine
-gpupdate /force
+Write-Host "Account Lockout Policy updated:"
+net accounts
+
 
 # Clean up
 Remove-Item $tempInf
