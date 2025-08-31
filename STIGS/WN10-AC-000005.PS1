@@ -24,20 +24,33 @@
    
     Example syntax:
     PS C:\> .WN10-AC-000005.ps1 
-# Set Account Lockout Threshold (e.g., 5 failed logon attempts)
-net accounts /lockoutthreshold:5
+PS C:\Users\Kevin0715> # Set Account Lockout Threshold (e.g., 5 failed logon attempts)
+>> net accounts /lockoutthreshold:5
+>>
+>> # Set Account Lockout Duration to 15 minutes
+>> net accounts /lockoutduration:15
+>>
+>> # Set Reset Account Lockout Counter After 15 minutes
+>> net accounts /lockoutwindow:15
+>>
+>> Write-Host "Account Lockout Policy updated:"
+>> net accounts
+>>
+The command completed successfully.
 
-# Set Account Lockout Duration to 15 minutes
-net accounts /lockoutduration:15
+The command completed successfully.
 
-# Set Reset Account Lockout Counter After 15 minutes
-net accounts /lockoutwindow:15
+The command completed successfully.
 
-Write-Host "Account Lockout Policy updated:"
-net accounts
-
-
-# Clean up
-Remove-Item $tempInf
-Write-Host "STIG-compliant account lockout policy applied successfully."
+Account Lockout Policy updated:
+Force user logoff how long after time expires?:       Never
+Minimum password age (days):                          0
+Maximum password age (days):                          42
+Minimum password length:                              0
+Length of password history maintained:                None
+Lockout threshold:                                    5
+Lockout duration (minutes):                           15
+Lockout observation window (minutes):                 15
+Computer role:                                        WORKSTATION
+The command completed successfully.
 
