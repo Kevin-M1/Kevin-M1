@@ -30,9 +30,48 @@
     PS C:\> .\__(WN10-CC-000005).ps1 
 #>
 
+# --- Safety: must be admin ---
+$admin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()
+).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+if (-not $admin) { throw "Run this PowerShell window as Administrator." }
 
-PS C:\Users\Kevin0715> # WN10-CC-000005 - Disable camera on the lock screen
+# --- 1) ADMX / GPO policy path ---
+$gpoKey = 'HKLM:\SOFTWARE\Policies\Microsoft\Camera'
+if (-not (Test-Path $gpoKey)) { New-Item -Path $gpoKey -Force | Out-Null }
+New-ItemProperty -Path $gpoKey -Name 'AllowCameraOnLockScreen' -PropertyType DWord -Value 0 -Force | Out-Null
 
-$key = 'HKLM:\SOFTWARE\Policies\Microsoft\Camera'
-if (-not (Test-Path $key)) { New-Item -Path $key -Force | Out-Null }
-New-ItemProperty -Path $key -Name 'AllowCameraOnLockScreen' -PropertyType DWord -Value 0 -Force | Out-Null
+# --- 2) PolicyManager (MDM/CSP) path(s) ---
+# Some builds honor the PolicyManager path; the value name is literally "value".
+$pmDefault = 'HKLM:\SOFTWARE\Microsoft\PolicyManager\default\Camera\AllowCameraOnLockScreen'
+$pmCurrent = 'HKLM:\SOFTWARE\Microsoft\PolicyManager\current\device\Camera\AllowCameraOnLockScreen'
+
+foreach ($k in @($pmDefault, $pmCurrent)) {
+    if (-not (Test-Path $k)) { New-Item -Path $k -Force | Out-Null }
+    New-ItemProperty -Path $k -Name 'value' -PropertyType DWord -Value 0 -Force | Out-Null
+}
+
+# --- 3) (Optional) If your tenant/basic policy only honors a broad camera block, set it too ---
+# Comment out if you don't want this:
+$allowUseKey = 'HKLM:\SOFTWARE\Policies\Microsoft\Camera'
+New-ItemProperty -Path $allowUseKey -Name 'AllowUseOfCamera' -PropertyType DWord -Value 1 -Force | Out-Null
+# NOTE: Setting AllowUseOfCamera=1 keeps camera allowed generally; lock screen is blocked by the lines above.
+# If your scanner expects camera fully disabled, set it to 0 instead:
+# Set-ItemProperty -Path $allowUseKey -Name 'AllowUseOfCamera' -Value 0
+
+# --- 4) Force policy refresh (harmless if no AD/GPO present) ---
+try { gpupdate /target:computer /force | Out-Null } catch {}
+
+# --- 5) Quick compliance check ---
+$gpo = (Get-ItemProperty -Path $gpoKey -Name AllowCameraOnLockScreen -ErrorAction SilentlyContinue).AllowCameraOnLockScreen
+$pm1 = (Get-ItemProperty -Path $pmDefault -Name value -ErrorAction SilentlyContinue).value
+$pm2 = (Get-ItemProperty -Path $pmCurrent -Name value -ErrorAction SilentlyContinue).value
+
+if (($gpo -eq 0) -and ($pm1 -eq 0 -or $null -eq $pm1) -and ($pm2 -eq 0 -or $null -eq $pm2)) {
+    Write-Host "WN10-CC-000005: COMPLIANT (camera blocked on lock screen)" -ForegroundColor Green
+} else {
+    Write-Host "WN10-CC-000005: NOT COMPLIANT – values read GPO=$gpo, PMdefault=$pm1, PMcurrent=$pm2" -ForegroundColor Red
+}
+
+WN10-CC-000005: COMPLIANT (camera blocked on lock screen)
+
+PS C:\Users\Kevin0715> 
