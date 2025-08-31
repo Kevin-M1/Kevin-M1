@@ -1,0 +1,38 @@
+.<#
+.SYNOPSIS
+    Remediates WN10-CC-000005 DISA STIG for Windows 10.
+.DESCRIPTION
+    Ensures camera access from the lock screen is disabled 
+    by setting the 'AllowCameraOnLockScreen' policy to 0.
+    This prevents users from using the camera when the device
+    is locked, improving security and protecting privacy
+
+.NOTES
+    Author          : Kevin Mejia
+    LinkedIn        :https://www.linkedin.com/in/kevin-mejia-901039270/
+    GitHub          : https://github.com/Kevin-M1
+    Date Created    : 2025-08-31
+    Last Modified   : 2025-08-31
+    Version         : 1.0
+    CVEs            : N/A
+    Plugin IDs      : N/A
+    STIG-ID         : WN10-CC-000005
+
+.TESTED ON
+    Date(s) Tested  : 
+    Tested By       : 
+    Systems Tested  : 
+    PowerShell Ver. : 
+
+.USAGE
+    
+    Example syntax:
+    PS C:\> .\__(WN10-CC-000005).ps1 
+#>
+
+
+PS C:\Users\Kevin0715> # WN10-CC-000005 - Disable camera on the lock screen
+
+$key = 'HKLM:\SOFTWARE\Policies\Microsoft\Camera'
+if (-not (Test-Path $key)) { New-Item -Path $key -Force | Out-Null }
+New-ItemProperty -Path $key -Name 'AllowCameraOnLockScreen' -PropertyType DWord -Value 0 -Force | Out-Null
