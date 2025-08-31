@@ -1,6 +1,6 @@
 <#
  .SYNOPSIS  
-    This Powershell script refers to security policy that ensures users are prevented from changing installiton options on windows systems. WN10-CC-000310 
+    This Powershell scrip ensures Windows 10 account lockout duration must be configured to 15 minutes or greater.
 
 
 .NOTES
