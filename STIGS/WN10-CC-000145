@@ -27,7 +27,16 @@
     Example syntax:
     PS C:\> .WN10-AC-000451.ps1 
 PS C:\Users\Kevin0715> # WN10-CC-000145 - Require password on wakeup (on battery)
-
-# Apply setting to current power scheme (DC = on battery)
-powercfg /SETDCVALUEINDEX SCHEME_CURRENT SUB_NONE CONSOLELOCK 1
-powercfg /SETACTIVE SCHEME_CURRENT
+>>
+>> # Apply setting to current power scheme (DC = on battery)
+>> powercfg /SETDCVALUEINDEX SCHEME_CURRENT SUB_NONE CONSOLELOCK 1
+>> powercfg /SETACTIVE SCHEME_CURRENT
+>>
+>> # Also set the STIG policy registry key (so scans see it)
+>> $regPath = "HKLM:\SOFTWARE\Policies\Microsoft\Power\PowerSettings\0e796bdb-100d-47d6-a2d5-f7d2daa51f51"
+>> if (-not (Test-Path $regPath)) {
+>>     New-Item -Path $regPath -Force | Out-Null
+>> }
+>> New-ItemProperty -Path $regPath -Name "DCSettingIndex" -PropertyType DWord -Value 1 -Force | Out-Null
+>>
+PS C:\Users\Kevin0715>
