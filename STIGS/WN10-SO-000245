@@ -1,0 +1,66 @@
+SYNOPSIS
+
+
+.NOTES
+    Author          : Kevin Mejia
+    LinkedIn        :https://www.linkedin.com/in/kevin-mejia-901039270/
+    GitHub          : https://github.com/Kevin-M1
+    Date Created    : 2025-09-03
+    Last Modified   : 2025-09-03
+    Version         : 1.0
+    CVEs            : N/A
+    Plugin IDs      : N/A
+    STIG-ID         : WN10-SO-000245
+
+.TESTED ON
+    Date(s) Tested  : 
+    Tested By       : 
+    Systems Tested  : 
+    PowerShell Ver. : 
+
+.USAGE
+Syntax:
+    PS C:\> .\__(WN10-SO-000245).ps1 
+   
+PS C:\> PS C:\Users\Kevin0715> if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()
+>>     ).IsInRole([Security.Principal.WindowsBuiltinRole] "Administrator")) {
+>>     Write-Error "Run this script as Administrator."
+>>     exit 1
+>> }
+>>
+>> function Set-Reg {
+>>     param(
+>>         [Parameter(Mandatory)][string]$Path,
+>>         [Parameter(Mandatory)][string]$Name,
+>>         [Parameter(Mandatory)][ValidateSet('DWord','QWord','String','ExpandString','Binary','MultiString')]$Type,
+>>         [Parameter(Mandatory)]$Value
+>>     )
+>>     if (-not (Test-Path $Path)) { New-Item -Path $Path -Force | Out-Null }
+>>     New-ItemProperty -Path $Path -Name $Name -PropertyType $Type -Value $Value -Force | Out-Null
+>> }
+>>
+>> # WN10-SO-000245 - Enable UAC Admin Approval Mode for the built-in Administrator
+>> # GPO: Security Options -> "User Account Control: Admin Approval Mode for the Built-in Administrator account" = Enabled
+>> # Registry: HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\FilterAdministratorToken = 1
+>> # (Prerequisite) Ensure UAC is enabled: EnableLUA = 1
+>>
+>> $uacKey = 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System'
+>> Set-Reg -Path $uacKey -Name 'FilterAdministratorToken' -Type DWord -Value 1
+>> Set-Reg -Path $uacKey -Name 'EnableLUA'              -Type DWord -Value 1   # required for Approval Mode to function
+>>
+>> try { gpupdate /target:computer /force | Out-Null } catch {}
+>>
+>> Get-ItemProperty -Path $uacKey |
+>> Select-Object PSPath, FilterAdministratorToken, EnableLUA |
+>> Format-Table -AutoSize
+>>
+
+PSPath                                                                                                           Filter
+                                                                                                                 Admini
+                                                                                                                 strato
+                                                                                                                 rToken
+------                                                                                                           ------
+Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System      1
+
+
+PS C:\Users\Kevin0715>
