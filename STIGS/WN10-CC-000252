@@ -1,34 +1,26 @@
+SYNOPSIS
 
 
+.NOTES
+    Author          : Kevin Mejia
+    LinkedIn        :https://www.linkedin.com/in/kevin-mejia-901039270/
+    GitHub          : https://github.com/Kevin-M1
+    Date Created    : 2025-09-03
+    Last Modified   : 2025-09-03
+    Version         : 1.0
+    CVEs            : N/A
+    Plugin IDs      : N/A
+    STIG-ID         : WN10-CC-000252
 
+.TESTED ON
+    Date(s) Tested  : 
+    Tested By       : 
+    Systems Tested  : 
+    PowerShell Ver. : 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+.USAGE
+Syntax:
+    PS C:\> .\__(WN10-CC-000252).ps1                                                                    
 
 PS C:\Windows\system32> # Disable Game DVR
 PS C:\Windows\system32> $regPath1 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\GameDVR"
