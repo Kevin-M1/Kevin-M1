@@ -1,5 +1,5 @@
 SYNOPSIS
-
+This PowerShell script enforces the use of a hardware security device for Windows Hello for Business by configuring the required registry key, ensuring compliance with STIG ID: WN10-CC-000255.
 
 .NOTES
     Author          : Kevin Mejia
