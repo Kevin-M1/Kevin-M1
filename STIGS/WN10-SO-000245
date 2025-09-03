@@ -1,5 +1,5 @@
 SYNOPSIS
-
+This PowerShell script remediates DISA STIG ID WN10-SO-000245 by enabling User Account Control (UAC) Admin Approval Mode for the built-in Administrator account.
 
 .NOTES
     Author          : Kevin Mejia
