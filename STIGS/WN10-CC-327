@@ -1,0 +1,75 @@
+SYNOPSIS
+This PowerShell script remediates DISA STIG ID WN10-CC-000327 by enabling PowerShell transcription on Windows 10 systems.
+
+.NOTES
+    Author          : Kevin Mejia
+    LinkedIn        :https://www.linkedin.com/in/kevin-mejia-901039270/
+    GitHub          : https://github.com/Kevin-M1
+    Date Created    : 2025-09-03
+    Last Modified   : 2025-09-03
+    Version         : 1.0
+    CVEs            : N/A
+    Plugin IDs      : N/A
+    STIG-ID         : WN10-CC-000327
+
+.TESTED ON
+    Date(s) Tested  : 
+    Tested By       : 
+    Systems Tested  : 
+    PowerShell Ver. : 
+
+.USAGE
+    Put any usage instructions here.
+    Example syntax:
+   
+PS C:\> WN10-CC-000327.ps1 
+
+>>   C:\Users\Kevin0715> if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()
+>>     ).IsInRole([Security.Principal.WindowsBuiltinRole] "Administrator")) {
+>>     Write-Error "Run this script as Administrator."
+>>     exit 1
+>> }
+>>
+>> function Set-Reg {
+>>     param(
+>>         [Parameter(Mandatory)][string]$Path,
+>>         [Parameter(Mandatory)][string]$Name,
+>>         [Parameter(Mandatory)][ValidateSet('DWord','QWord','String','ExpandString','Binary','MultiString')]$Type,
+>>         [Parameter(Mandatory)]$Value
+>>     )
+>>     if (-not (Test-Path $Path)) { New-Item -Path $Path -Force | Out-Null }
+>>     New-ItemProperty -Path $Path -Name $Name -PropertyType $Type -Value $Value -Force | Out-Null
+>> }
+>>
+>> # Log directory for transcriptions
+>> $LogDir = 'C:\Windows\Logs\PowerShellTranscripts'
+>> New-Item -ItemType Directory -Path $LogDir -Force | Out-Null
+>> # Harden permissions (admins/system full; authenticated users modify so they can write logs)
+>> icacls $LogDir /inheritance:r | Out-Null
+>> icacls $LogDir /grant:r "SYSTEM:(OI)(CI)(F)" "Administrators:(OI)(CI)(F)" "Authenticated Users:(OI)(CI)(M)" | Out-Null
+>>
+>> # Enable PowerShell Transcription (STIG WN10-CC-000327)
+>> $pol = 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\PowerShell\Transcription'
+>> Set-Reg -Path $pol -Name 'EnableTranscripting'     -Type DWord -Value 1
+>> Set-Reg -Path $pol -Name 'EnableInvocationHeader'  -Type DWord -Value 1
+>> Set-Reg -Path $pol -Name 'OutputDirectory'         -Type String -Value $LogDir
+>>
+>> try { gpupdate /target:computer /force | Out-Null } catch {}
+>>
+>> Get-ItemProperty -Path $pol |
+>> Select-Object PSPath, EnableTranscripting, EnableInvocationHeader, OutputDirectory |
+>> Format-Table -AutoSize
+>>
+
+PSPath                                                                                                              Ena
+                                                                                                                    ble
+                                                                                                                    Tra
+                                                                                                                    nsc
+                                                                                                                    rip
+                                                                                                                    tin
+                                                                                                                      g
+------                                                                                                              ---
+Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\PowerShell\Transcription   1
+
+
+PS C:\Users\Kevin0715>
