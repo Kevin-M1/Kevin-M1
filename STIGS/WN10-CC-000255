@@ -19,7 +19,8 @@ SYNOPSIS
     PowerShell Ver. : 
 
 .USAGE
-
+Syntax:
+    PS C:\> .\__(WN10-CC-000255).ps1 
    
 PS C:\> PS C:\Users\Kevin0715> if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()
 >>     ).IsInRole([Security.Principal.WindowsBuiltinRole] "Administrator")) {
