@@ -1,0 +1,61 @@
+SYNOPSIS
+This PowerShell script remediates DISA STIG ID WN10-CC-000365 by preventing Windows 10 apps from being activated by voice commands while the system is locked.
+
+.NOTES
+    Author          : Kevin Mejia
+    LinkedIn        :https://www.linkedin.com/in/kevin-mejia-901039270/
+    GitHub          : https://github.com/Kevin-M1
+    Date Created    : 2025-09-03
+    Last Modified   : 2025-09-03
+    Version         : 1.0
+    CVEs            : N/A
+    Plugin IDs      : N/A
+    STIG-ID         : WN10-CC-000365
+
+.TESTED ON
+    Date(s) Tested  : 
+    Tested By       : 
+    Systems Tested  : 
+    PowerShell Ver. : 
+
+.USAGE
+    Put any usage instructions here.
+    Example syntax:
+   
+PS C:\> WN10-CC-000365.ps1 
+
+#>PS C:\Users\Kevin0715> if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()
+>>     ).IsInRole([Security.Principal.WindowsBuiltinRole] "Administrator")) {
+>>     Write-Error "Run this script as Administrator."
+>>     exit 1
+>> }
+>>
+>> function Set-Reg {
+>>     param(
+>>         [Parameter(Mandatory)][string]$Path,
+>>         [Parameter(Mandatory)][string]$Name,
+>>         [Parameter(Mandatory)][ValidateSet('DWord','QWord','String','ExpandString','Binary','MultiString')]$Type,
+>>         [Parameter(Mandatory)]$Value
+>>     )
+>>     if (-not (Test-Path $Path)) { New-Item -Path $Path -Force | Out-Null }
+>>     New-ItemProperty -Path $Path -Name $Name -PropertyType $Type -Value $Value -Force | Out-Null
+>> }
+>>
+>> $apPolHKLM = 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy'
+>> Set-Reg -Path $apPolHKLM -Name 'LetAppsActivateWithVoiceAboveLock' -Type DWord -Value 2
+>> Set-Reg -Path $apPolHKLM -Name 'LetAppsActivateWithVoice' -Type DWord -Value 2
+>>
+>> try { gpupdate /target:computer /force | Out-Null } catch {}
+>>
+>> Get-ItemProperty -Path $apPolHKLM `
+>> | Select-Object PSPath, LetAppsActivateWithVoiceAboveLock, LetAppsActivateWithVoice `
+>> | Format-Table -AutoSize
+>>
+
+PSPath                                                                                                LetAppsActivateWi
+                                                                                                       thVoiceAboveLock
+------                                                                                                -----------------
+Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy                 2
+
+
+PS C:\Users\Kevin0715>
