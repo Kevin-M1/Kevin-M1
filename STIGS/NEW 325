@@ -1,25 +1,19 @@
 <#
-.SYNOPSIS
-    Remediates WN10-CC-000275 DISA STIG for Windows 10.
+Description
+This PowerShell script remediates DISA STIG ID WN10-CC-000325 by disabling automatic sign-in of the last interactive user after a system-initiated restart 
+(also known as Automatic Restart Sign-On, ARSO).
 
-.DESCRIPTION
-    Ensures local drive redirection is prevented in Remote Desktop Session Hosts 
-    by setting the 'fDisableCdm' registry policy to 1. 
-
-    This improves system security by blocking remote users from accessing local drives 
-    on their client device during an RDP session, reducing the risk of data leakage 
-    or unauthorized file transfers.
 #>
 .NOTES
     Author          : Kevin Mejia
     LinkedIn        :https://www.linkedin.com/in/kevin-mejia-901039270/
     GitHub          : https://github.com/Kevin-M1
-    Date Created    : 2025-08-31
-    Last Modified   : 2025-08-31
+    Date Created    : 2025-09-03
+    Last Modified   : 2025-09-03
     Version         : 1.0
     CVEs            : N/A
     Plugin IDs      : N/A
-    STIG-ID         : WN10-CC-000275
+    STIG-ID         : WN10-CC-000325
 
 .TESTED ON
     Date(s) Tested  : 
@@ -30,9 +24,10 @@
 .USAGE
     
     Example syntax:
-    PS C:\> .\__(WN10-CC-000275).ps1 
+    PS C:\> .\__(WN10-CC-000325).ps1 
 
-PS C:\PS C:\Windows\system32> # WN10-CC-000325 - Disable automatic sign-in of last interactive user after a system-initiated restart (ARSO)
+PS C:\PS C:\Windows\system32>
+# WN10-CC-000325 - Disable automatic sign-in of last interactive user after a system-initiated restart (ARSO)
 >>
 >> function Set-Reg {
 >>     param(
