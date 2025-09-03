@@ -1,0 +1,72 @@
+<#
+.SYNOPSIS
+    Remediates WN10-CC-000275 DISA STIG for Windows 10.
+
+.DESCRIPTION
+    Ensures local drive redirection is prevented in Remote Desktop Session Hosts 
+    by setting the 'fDisableCdm' registry policy to 1. 
+
+    This improves system security by blocking remote users from accessing local drives 
+    on their client device during an RDP session, reducing the risk of data leakage 
+    or unauthorized file transfers.
+#>
+.NOTES
+    Author          : Kevin Mejia
+    LinkedIn        :https://www.linkedin.com/in/kevin-mejia-901039270/
+    GitHub          : https://github.com/Kevin-M1
+    Date Created    : 2025-08-31
+    Last Modified   : 2025-08-31
+    Version         : 1.0
+    CVEs            : N/A
+    Plugin IDs      : N/A
+    STIG-ID         : WN10-CC-000275
+
+.TESTED ON
+    Date(s) Tested  : 
+    Tested By       : 
+    Systems Tested  : 
+    PowerShell Ver. : 
+
+.USAGE
+    
+    Example syntax:
+    PS C:\> .\__(WN10-CC-000275).ps1 
+
+PS C:\PS C:\Windows\system32> # WN10-CC-000325 - Disable automatic sign-in of last interactive user after a system-initiated restart (ARSO)
+>>
+>> function Set-Reg {
+>>     param(
+>>         [Parameter(Mandatory)][string]$Path,
+>>         [Parameter(Mandatory)][string]$Name,
+>>         [Parameter(Mandatory)][ValidateSet('DWord','QWord','String','ExpandString','Binary','MultiString')]$Type,
+>>         [Parameter(Mandatory)]$Value
+>>     )
+>>     if (-not (Test-Path $Path)) { New-Item -Path $Path -Force | Out-Null }
+>>     New-ItemProperty -Path $Path -Name $Name -PropertyType $Type -Value $Value -Force | Out-Null
+>> }
+>>
+>> $polPath = 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\System'
+>> $cvPath  = 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System'
+>>
+>> Set-Reg -Path $polPath -Name 'DisableAutomaticRestartSignOn' -Type DWord -Value 1
+>> Set-Reg -Path $cvPath  -Name 'DisableAutomaticRestartSignOn' -Type DWord -Value 1
+>>
+>> # Apply and show results (will display errors if not elevated, but won't exit your shell)
+>> try { gpupdate /target:computer /force | Out-Null } catch {}
+>>
+>> Get-ItemProperty -Path $polPath, $cvPath |
+>> Select-Object PSPath, DisableAutomaticRestartSignOn |
+>> Format-Table -AutoSize
+>>
+
+PSPath                                                                                                           Disabl
+                                                                                                                 eAutom
+                                                                                                                 aticRe
+                                                                                                                 startS
+                                                                                                                  ignOn
+------                                                                                                           ------
+Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System                     1
+Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System      1
+
+
+PS C:\Windows\system32>
