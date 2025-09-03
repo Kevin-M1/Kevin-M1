@@ -1,4 +1,5 @@
 SYNOPSIS
+This PowerShell script remediates DISA STIG ID WN10-CC-000252 by disabling Windows Game Recording and Broadcasting (Game DVR and Game Bar), preventing unauthorized screen capture or broadcasting on Windows 10 systems.
 
 
 .NOTES
