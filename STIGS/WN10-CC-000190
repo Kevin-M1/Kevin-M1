@@ -1,0 +1,74 @@
+.SYNOPSIS
+This PowerShell script remediates DISA STIG ID WN10-CC-000190 by disabling Autoplay on all drives in Windows 10. 
+It enforces compliance by setting the required registry keys under both HKLM and HKCU, in both the Policies and CurrentVersion\Policies registry paths.
+
+.NOTES
+    Author          : Kevin Mejia
+    LinkedIn        :https://www.linkedin.com/in/kevin-mejia-901039270/
+    GitHub          : https://github.com/Kevin-M1
+    Date Created    : 2025-09-2025
+    Last Modified   : 2025-09-2025
+    Version         : 1.0
+    CVEs            : N/A
+    Plugin IDs      : N/A
+    STIG-ID         : WN10-CC-000190
+
+.TESTED ON
+    Date(s) Tested  : 
+    Tested By       : 
+    Systems Tested  : 
+    PowerShell Ver. : 
+
+.USAGE
+    
+    Example syntax:
+    PS C:\> .\__(WN10-CC-000190).ps1 #>
+
+PS C:\Users\Kevin0715># Remediate DISA STIG WN10-CC-000190 - Disable Autoplay for all drives
+# Run in an elevated PowerShell session.
+
+if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()
+    ).IsInRole([Security.Principal.WindowsBuiltinRole] "Administrator")) {
+    Write-Error "Run this script as Administrator."
+    exit 1
+}
+
+function Set-Reg {
+    param(
+        [Parameter(Mandatory)][string]$Path,
+        [Parameter(Mandatory)][string]$Name,
+        [Parameter(Mandatory)][ValidateSet('DWord','QWord','String','ExpandString','Binary','MultiString')]$Type,
+        [Parameter(Mandatory)]$Value
+    )
+    if (-not (Test-Path $Path)) { New-Item -Path $Path -Force | Out-Null }
+    New-ItemProperty -Path $Path -Name $Name -PropertyType $Type -Value $Value -Force | Out-Null
+}
+
+# Policy paths (preferred by GPO)
+$polHKLM = 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\Explorer'
+$polHKCU = 'HKCU:\SOFTWARE\Policies\Microsoft\Windows\Explorer'
+
+# Legacy/currentversion policy locations (some auditors check these too)
+$cvHKLM = 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer'
+$cvHKCU = 'HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer'
+
+# Disable Autoplay on ALL drives
+Set-Reg -Path $polHKLM -Name 'NoDriveTypeAutoRun'    -Type DWord -Value 255
+Set-Reg -Path $polHKCU -Name 'NoDriveTypeAutoRun'    -Type DWord -Value 255
+Set-Reg -Path $cvHKLM  -Name 'NoDriveTypeAutoRun'    -Type DWord -Value 255
+Set-Reg -Path $cvHKCU  -Name 'NoDriveTypeAutoRun'    -Type DWord -Value 255
+
+# Disable Autoplay for non-volume devices
+Set-Reg -Path $polHKLM -Name 'NoAutoplayfornonVolume' -Type DWord -Value 1
+Set-Reg -Path $polHKCU -Name 'NoAutoplayfornonVolume' -Type DWord -Value 1
+
+# Also disable CD-ROM autorun (defense in depth)
+Set-Reg -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\Cdrom' -Name 'AutoRun' -Type DWord -Value 0
+
+# Apply and show results
+try { gpupdate /target:computer /force | Out-Null } catch {}
+try { gpupdate /target:user /force     | Out-Null } catch {}
+
+Get-ItemProperty -Path $polHKLM, $polHKCU, $cvHKLM, $cvHKCU `
+| Select-Object PSPath, NoDriveTypeAutoRun, NoAutoplayfornonVolume `
+| Format-Table -AutoSize
