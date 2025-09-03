@@ -1,0 +1,87 @@
+.SYNOPSIS
+This PowerShell script remediates DISA STIG ID WN10-CC-000185 by configuring the default Autorun behavior in 
+Windows 10 to prevent execution of autorun commands.
+.NOTES
+    Author          : Kevin Mejia
+    LinkedIn        :https://www.linkedin.com/in/kevin-mejia-901039270/
+    GitHub          : https://github.com/Kevin-M1
+    Date Created    : 2025-09-03
+    Last Modified   : 2025-09-03
+    Version         : 1.0
+    CVEs            : N/A
+    Plugin IDs      : N/A
+    STIG-ID         : WN10-CC-000185
+
+.TESTED ON
+    Date(s) Tested  : 
+    Tested By       : 
+    Systems Tested  : 
+    PowerShell Ver. : 
+
+.USAGE
+    
+    Example syntax:
+    PS C:\> .\__(WN10-CC-000185).ps1 #>
+
+
+PS C:\Users\Kevin0715> # Remediate DISA STIG WN10-CC-000185 - Default Autorun behavior must prevent autorun commands
+>> # Run in an elevated PowerShell session.
+>>
+>> if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()
+>>     ).IsInRole([Security.Principal.WindowsBuiltinRole] "Administrator")) {
+>>     Write-Error "Run this script as Administrator."
+>>     exit 1
+>> }
+>>
+>> function Set-Reg {
+>>     param(
+>>         [Parameter(Mandatory)][string]$Path,
+>>         [Parameter(Mandatory)][string]$Name,
+>>         [Parameter(Mandatory)][ValidateSet('DWord','QWord','String','ExpandString','Binary','MultiString')]$Type,
+>>         [Parameter(Mandatory)]$Value
+>>     )
+>>     if (-not (Test-Path $Path)) { New-Item -Path $Path -Force | Out-Null }
+>>     New-ItemProperty -Path $Path -Name $Name -PropertyType $Type -Value $Value -Force | Out-Null
+>> }
+>>
+>> # Policy paths
+>> $polHKLM = 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\Explorer'
+>> $polHKCU = 'HKCU:\SOFTWARE\Policies\Microsoft\Windows\Explorer'
+>>
+>> # CurrentVersion policy locations (some scanners check these too)
+>> $cvHKLM  = 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer'
+>> $cvHKCU  = 'HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer'
+>>
+>> # Configure default Autorun behavior to NOT execute any autorun commands
+>> #   NoAutorun = 1  -> Do not execute any autorun commands
+>> #   HonorAutorunSetting = 1 -> Enforce the policy setting
+>> $targets = @($polHKLM, $polHKCU, $cvHKLM, $cvHKCU)
+>>
+>> foreach ($p in $targets) {
+>>     Set-Reg -Path $p -Name 'NoAutorun'            -Type DWord -Value 1
+>>     Set-Reg -Path $p -Name 'HonorAutorunSetting'  -Type DWord -Value 1
+>> }
+>>
+>> # Optional: also disable CD-ROM autorun at the service level (defense in depth)
+>> Set-Reg -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\Cdrom' -Name 'AutoRun' -Type DWord -Value 0
+>>
+>> # Apply and show results
+>> try { gpupdate /target:computer /force | Out-Null } catch {}
+>> try { gpupdate /target:user /force     | Out-Null } catch {}
+>>
+>> Get-ItemProperty -Path $polHKLM, $polHKCU, $cvHKLM, $cvHKCU `
+>> | Select-Object PSPath, NoAutorun, HonorAutorunSetting `
+>> | Format-Table -AutoSize
+>>
+
+PSPath                                                                                                             NoAu
+                                                                                                                   toru
+                                                                                                                      n
+------                                                                                                             ----
+Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer                   1
+Microsoft.PowerShell.Core\Registry::HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\Windows\Explorer                    1
+Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer    1
+Microsoft.PowerShell.Core\Registry::HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer     1
+
+
+PS C:\Users\Kevin0715>
