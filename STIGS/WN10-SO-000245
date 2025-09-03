@@ -22,45 +22,41 @@ This PowerShell script remediates DISA STIG ID WN10-SO-000245 by enabling User A
 Syntax:
     PS C:\> .\__(WN10-SO-000245).ps1 
    
-PS C:\> PS C:\Users\Kevin0715> if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()
->>     ).IsInRole([Security.Principal.WindowsBuiltinRole] "Administrator")) {
->>     Write-Error "Run this script as Administrator."
->>     exit 1
->> }
+PS C:\Windows\system32> # Run as Administrator
 >>
 >> function Set-Reg {
->>     param(
->>         [Parameter(Mandatory)][string]$Path,
->>         [Parameter(Mandatory)][string]$Name,
->>         [Parameter(Mandatory)][ValidateSet('DWord','QWord','String','ExpandString','Binary','MultiString')]$Type,
->>         [Parameter(Mandatory)]$Value
->>     )
+>>     param([string]$Path,[string]$Name,[ValidateSet('DWord','QWord','String','ExpandString','Binary','MultiString')]$Type,[Parameter(Mandatory)]$Value)
 >>     if (-not (Test-Path $Path)) { New-Item -Path $Path -Force | Out-Null }
 >>     New-ItemProperty -Path $Path -Name $Name -PropertyType $Type -Value $Value -Force | Out-Null
 >> }
 >>
->> # WN10-SO-000245 - Enable UAC Admin Approval Mode for the built-in Administrator
->> # GPO: Security Options -> "User Account Control: Admin Approval Mode for the Built-in Administrator account" = Enabled
->> # Registry: HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\FilterAdministratorToken = 1
->> # (Prerequisite) Ensure UAC is enabled: EnableLUA = 1
+>> $uac64 = 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System'
+>> $uac32 = 'HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Policies\System'  # for some scanners
 >>
->> $uacKey = 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System'
->> Set-Reg -Path $uacKey -Name 'FilterAdministratorToken' -Type DWord -Value 1
->> Set-Reg -Path $uacKey -Name 'EnableLUA'              -Type DWord -Value 1   # required for Approval Mode to function
+>> # Required for WN10-SO-000245
+>> Set-Reg -Path $uac64 -Name 'FilterAdministratorToken' -Type DWord -Value 1
+>> Set-Reg -Path $uac32 -Name 'FilterAdministratorToken' -Type DWord -Value 1
 >>
+>> # Prerequisite: Run all admins in Admin Approval Mode
+>> Set-Reg -Path $uac64 -Name 'EnableLUA' -Type DWord -Value 1
+>>
+>> # Common companion settings (help some plugins pass)
+>> # Prompt for consent on the secure desktop
+>> Set-Reg -Path $uac64 -Name 'ConsentPromptBehaviorAdmin' -Type DWord -Value 2
+>> # Ensure prompts happen on the secure desktop
+>> Set-Reg -Path $uac64 -Name 'PromptOnSecureDesktop' -Type DWord -Value 1
+>>
+>> # Apply and show
 >> try { gpupdate /target:computer /force | Out-Null } catch {}
 >>
->> Get-ItemProperty -Path $uacKey |
->> Select-Object PSPath, FilterAdministratorToken, EnableLUA |
->> Format-Table -AutoSize
+>> Get-ItemProperty -Path $uac64, $uac32 |
+>>   Select-Object PSPath, FilterAdministratorToken, EnableLUA, ConsentPromptBehaviorAdmin, PromptOnSecureDesktop |
+>>   Format-Table -AutoSize
 >>
 
-PSPath                                                                                                           Filter
-                                                                                                                 Admini
-                                                                                                                 strato
-                                                                                                                 rToken
-------                                                                                                           ------
-Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System      1
+PSPath
+------
+Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
+Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Policie...
 
 
-PS C:\Users\Kevin0715>
