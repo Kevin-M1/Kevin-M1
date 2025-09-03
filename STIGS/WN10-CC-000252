@@ -1,0 +1,57 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+PS C:\Windows\system32> # Disable Game DVR
+PS C:\Windows\system32> $regPath1 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\GameDVR"
+PS C:\Windows\system32> if (!(Test-Path $regPath1)) {
+>>     New-Item -Path $regPath1 -Force | Out-Null
+>> }
+PS C:\Windows\system32> New-ItemProperty -Path $regPath1 -Name "AllowGameDVR" -Value 0 -PropertyType DWord -Force | Out-Null
+PS C:\Windows\system32>
+PS C:\Windows\system32> # Disable Game Bar broadcasting
+PS C:\Windows\system32> $regPath2 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\GameBar"
+PS C:\Windows\system32> if (!(Test-Path $regPath2)) {
+>>     New-Item -Path $regPath2 -Force | Out-Null
+>> }
+PS C:\Windows\system32> New-ItemProperty -Path $regPath2 -Name "AllowBroadcasting" -Value 0 -PropertyType DWord -Force | Out-Null
+PS C:\Windows\system32>
+PS C:\Windows\system32> # Optional: Force Group Policy update
+PS C:\Windows\system32> gpupdate /force
+Updating policy...
+
+Computer Policy update has completed successfully.
+User Policy update has completed successfully.
+
+PS C:\Windows\system32>
+PS C:\Windows\system32> Write-Output "Windows Game Recording and Broadcasting have been disabled per STIG WN10-CC-000252."
+Windows Game Recording and Broadcasting have been disabled per STIG WN10-CC-000252.
+PS C:\Windows\system32>
