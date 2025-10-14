@@ -1,6 +1,7 @@
 # <a href="https://www.linkedin.com/in/kevin-mejia-901039270/">Kevin M</a>'s IT and Cybersecurity Project Portfolio 🔐
 
-I'm deeply passionate about cybersecurity and thrive on solving complex challenges through practical, hands-on projects. From vulnerability management to threat detection, these experiences have allowed me to explore the dynamic nature of the cybersecurity landscape. I invite you to take a look at my work and see how I've contributed to strengthening security operations and processes
+I'm deeply passionate about cybersecurity and IAM. I thrive on solving complex challenges through practical, hands-on projects. From vulnerability management to threat detection—and now enforcing least-privilege access and secure authentication—these experiences let me explore the dynamic cybersecurity landscape. I invite you to check out my work to see how I strengthen security operations, processes, and identity controls.
+
 
 
 ## ⚠️ Vulnerability Management Projects
