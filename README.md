@@ -12,7 +12,7 @@ I'm deeply passionate about cybersecurity and thrive on solving complex challeng
 
 - **[Threat Hunting Scenario (Tor Browser Usage)](https://github.com/Kevin-M1/Threat-Hunting-Scenario-Tor-Browser-Usage-)**
 
-## **[Configuring On-premises Active Directory within Azure vms)]https://github.com/Kevin-M1/-Information-Technology-Projects)**
+## **[Configuring On-premises Active Directory within Azure vms)](https://github.com/Kevin-M1/-Information-Technology-Projects)**
 
 <hr/>
 
