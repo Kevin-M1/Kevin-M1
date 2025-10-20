@@ -13,6 +13,9 @@ I'm deeply passionate about cybersecurity and IAM. I thrive on solving complex c
 
 - **[Threat Hunting Scenario (Tor Browser Usage)](https://github.com/Kevin-M1/Threat-Hunting-Scenario-Tor-Browser-Usage-)**
 
+## Microsoft Azure (Sentinel) 
+- https://github.com/Kevin-M1/Microsoft-Sentinel-
+
 ## Information Technology Projects
 
 -   [Configuring On-premises Active Directory within Azure vms](https://github.com/Kevin-M1/Configuring-On-premises-Active-Directory-within-Azure-VMs.git)
