@@ -14,7 +14,7 @@ I'm deeply passionate about cybersecurity and IAM. I thrive on solving complex c
 - **[Threat Hunting Scenario (Tor Browser Usage)](https://github.com/Kevin-M1/Threat-Hunting-Scenario-Tor-Browser-Usage-)**
 
 ## Microsoft Azure (Sentinel) 
-- https://github.com/Kevin-M1/Microsoft-Sentinel-
+- [Entra ID (Azure) Authentication Success Geo-Map — Sentinel Workbook + KQL](https://github.com/Kevin-M1/Microsoft-Sentinel)
 
 ## Information Technology Projects
 
