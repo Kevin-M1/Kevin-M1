@@ -15,7 +15,7 @@ I'm deeply passionate about cybersecurity and IAM. I thrive on solving complex c
 
 ## Microsoft Sentinel- Workbooks
 - [Entra ID (Azure) Authentication Success Geo-Map — Sentinel Workbook + KQL](https://github.com/Kevin-M1/Microsoft-Sentinel-)
-
+- [Entra ID (Azure) Authentication Failures Geo-Map — Sentinel Workbook + KQL](https://github.com/Kevin-M1/Microsoft-Sentinel-Workbook-Projects-1.1)
 ## Information Technology Projects
 
 -   [Configuring On-premises Active Directory within Azure vms](https://github.com/Kevin-M1/Configuring-On-premises-Active-Directory-within-Azure-VMs.git)
