@@ -13,7 +13,7 @@ I'm deeply passionate about cybersecurity and IAM. I thrive on solving complex c
 
 - **[Threat Hunting Scenario (Tor Browser Usage)](https://github.com/Kevin-M1/Threat-Hunting-Scenario-Tor-Browser-Usage-)**
 
-## Microsoft Sentinel- Workbooks
+## Microsoft Sentinel(Azure)- Workbooks
 - [Malicious Traffic Entering the Network — Sentinel Workbook + KQL (VM-Windows-NSG-28)](https://github.com/Kevin-M1/Workbooks.Sentinel-1.4)
 - [Malicious Traffic Entering the Network — Sentinel Workbook + KQL](https://github.com/Kevin-M1/Microsoft-Sentinel-Workbook-Projects-1.3)
 - [Entra ID (Azure) Authentication Success Geo-Map — Sentinel Workbook + KQL](https://github.com/Kevin-M1/Microsoft-Sentinel-)
