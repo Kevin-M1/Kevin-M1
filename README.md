@@ -19,7 +19,8 @@ I'm deeply passionate about cybersecurity and IAM. I thrive on solving complex c
 ## Information Technology Projects
 
 -   [Configuring On-premises Active Directory within Azure vms](https://github.com/Kevin-M1/Configuring-On-premises-Active-Directory-within-Azure-VMs.git)
--   [Network-Security-Groups-NSGs-and-Inspecting-Network-Protocols](https://github.com/Kevin-M1/Network-Security-Groups-NSGs-and-Inspecting-Network-Protocols-.git) 
+-   [Network-Security-Groups-NSGs-and-Inspecting-Network-Protocols](https://github.com/Kevin-M1/Network-Security-Groups-NSGs-and-Inspecting-Network-Protocols-.git)
+-   [VM Authentication Failures — Sentinel Workbook + KQL](https://github.com/Kevin-M1/Microsoft-Sentinel-Workbook-Projects-1.2)
 
 <hr/>
 
